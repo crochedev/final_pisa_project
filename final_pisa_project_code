@@ -1,0 +1,90 @@
+
+###Caitlin's Final R For Archaeology Project###
+#Step 1 install the dataset I was to use (found on CRAN)#
+```
+install.packages("zoolog")
+
+dataFile <- system.file("extdata", "dataValenzuelaLamas2008.csv.gz",
+                        package="zoolog")
+dataframe1 <- utils::read.csv2(dataFile,
+                                na.strings = "",
+                                encoding = "UTF-8")
+#changed from dataExample to dataframe
+
+View(dataframe1)
+
+#step 2 install relevent packages
+install.packages("dplyr")
+library(dplyr)
+library(ggplot2)
+```
+#step 2; 
+#reduce table into the columns needed and rename it.
+```
+# Select specific columns by name
+#new_df <- dataframe1[, c("Site", "Especie", "Os","Lat", "Epif", "TAQ", "TPQ", 
+                         "GL", "BT", "Bp", "GB", "SH", "SB")]
+
+# Print the new data frame
+View(new_df)
+nrow(new_df)
+
+#rename the 'Especie' column name to 'Species'
+new_df <- new_df %>% rename(Species = Especie)
+#check it works
+View(new_df)
+```
+
+#step 3;
+#Study aim one - I want to prove that the size(length and breadth measurements)
+#of animal bone remains decreased over time (due to domestication). 
+```
+
+#step 3.a; select specific bone, section of bone and 2 measurements to take, 
+#in ref to publication and results in the table.
+
+# Humerus for cattle, sheep/goat and pig as there are measurements for bredth 
+#and width for both of these clearly labeled on Table 2 of the study. 
+
+#step 3.b; create linear regression model of length vs bredth.
+#starting with --- aka ovar (as bota aka cattle did not have enough data that 
+#could fulfill GL,BT and bota)
+
+new_df_filtered <- new_df %>% filter(Especie == "ovar")
+df_filtered <- na.omit(new_df_filtered)
+View(new_df_filtered)
+
+new_df_filtered.lm1 <- lm(GL ~ BT, data = df_filtered)
+
+summary(new_df_filtered.lm1)
+
+ggplot(data = new_df_filtered, mapping = aes(x = BT, y = GL)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, aes(colour = "Regression")) +
+  geom_line(aes(y = mean(GL), colour = "Average"))
+
+
+#step 3.c; scatterplot of results (on a timescale). I wanted to put it on a 
+#timescale but due to the lack of results that align it is not possible to do so. 
+
+plot(x = new_df_filtered$BT, y = new_df_filtered$GL, 
+     main = "Scatterplot of GL vs BT", 
+     xlab = "BT", ylab = "GL", pch = 19, col = "blue") 
+
+
+
+```
+#step 4;
+#study aim two - I want to prove that there is a regional difference between 
+#animal sizes at the same periods of time. 
+
+#step 4.a; select a time period to test all of the regions against.
+
+#step 4.b; divide regions/sites and take the average bone size for a specific 
+#species in step 3.
+
+#step 4.c; create scatterplot of regions/ sites vs bone size. 
+```
+
+```
+
