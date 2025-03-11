@@ -1,7 +1,8 @@
 
+```
 ###Caitlin's Final R For Archaeology Project###
 #Step 1 install the dataset I was to use (found on CRAN)#
-```
+
 install.packages("zoolog")
 
 dataFile <- system.file("extdata", "dataValenzuelaLamas2008.csv.gz",
@@ -22,14 +23,57 @@ library(ggplot2)
 #reduce table into the columns needed and rename it.
 ```
 # Select specific columns by name
-#new_df <- dataframe1[, c("Site", "Especie", "Os","Lat", "Epif", "TAQ", "TPQ", 
+new_df <- dataframe1[, c("Site", "Especie", "Os","Lat", "Epif", "TAQ", "TPQ", 
                          "GL", "BT", "Bp", "GB", "SH", "SB")]
 
 # Print the new data frame
 View(new_df)
 nrow(new_df)
 
-#rename the 'Especie' column name to 'Species'
+
+###inserted step ####
+#i think it would be best to seperate each site so that it has its own table to 
+#be analysed from.
+
+#ALP
+alp_table <- new_df %>% filter(Site == "ALP")
+View(alp_table)
+
+#plot a bar chart of species frequency 
+alp_filtered <- alp_table %>% filter(Species %in% c("bota", "sudo", "meso", "cahi", "ovar"))
+
+ggplot(alp_filtered, aes(x = Species)) +
+  geom_bar() +
+  labs(title = "Frequency of Values in 'Species'", x = "Species", y = "Frequency")
+
+
+
+#OLD
+old_table <- new_df %>% filter(Site == "OLD")
+View(old_table)
+
+#plot a bar chart of species frequency 
+old_filtered <- old_table %>% filter(Species %in% c("bota", "sudo", "meso", "cahi", "ovar"))
+
+ggplot(old_filtered, aes(x = Species)) +
+  geom_bar() +
+  labs(title = "Frequency of Values in 'Species'", x = "Species", y = "Frequency")
+
+
+
+#TFC
+tfc_table <- new_df %>% filter(Site == "TFC")
+View(tfc_table)
+
+#plot a bar chart of species frequency 
+tfc_filtered <- old_table %>% filter(Species %in% c("bota", "sudo", "meso", "cahi", "ovar"))
+
+ggplot(tfc_filtered, aes(x = Species)) +
+  geom_bar() +
+  labs(title = "Frequency of Values in 'Species'", x = "Species", y = "Frequency")
+
+
+#rename the 'Especie' column name to 'Species'(NEED TO FIND OUT WHAT SPECIES IS WHAT)
 new_df <- new_df %>% rename(Species = Especie)
 #check it works
 View(new_df)
@@ -50,15 +94,13 @@ View(new_df)
 #starting with --- aka ovar (as bota aka cattle did not have enough data that 
 #could fulfill GL,BT and bota)
 
-new_df_filtered <- new_df %>% filter(Especie == "ovar")
-df_filtered <- na.omit(new_df_filtered)
-View(new_df_filtered)
+new_df_filtered_ovar <- new_df %>% filter(Species == "ovar")
 
-new_df_filtered.lm1 <- lm(GL ~ BT, data = df_filtered)
+new_df_filtered_ovar.lm1 <- lm(GL ~ BT, data = new_df_filtered_ovar)
 
-summary(new_df_filtered.lm1)
+summary(new_df_filtered_ovar.lm1)
 
-ggplot(data = new_df_filtered, mapping = aes(x = BT, y = GL)) +
+ggplot(data = new_df_filtered_ovar, mapping = aes(x = BT, y = GL)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE, aes(colour = "Regression")) +
   geom_line(aes(y = mean(GL), colour = "Average"))
@@ -84,7 +126,20 @@ plot(x = new_df_filtered$BT, y = new_df_filtered$GL,
 #species in step 3.
 
 #step 4.c; create scatterplot of regions/ sites vs bone size. 
+
+
+
+#step 5
+#	Use "Epif" column use s=fused vs ns=unfused to find and compare frequency.
+#Barplot of percentages
 ```
+epif_filtered_df <- new_df[new_df$epif %in% c("s", "ns"), ]
+
+freq_table_fusion <- table(epif_filtered_df$Epif)
+print(freq_table_fusion)
+
 
 ```
+
+
 
