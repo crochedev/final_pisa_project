@@ -133,10 +133,98 @@ plot(x = new_df_filtered$BT, y = new_df_filtered$GL,
 #	Use "Epif" column use s=fused vs ns=unfused to find and compare frequency.
 #Barplot of percentages
 ```
-epif_filtered_df <- new_df[new_df$epif %in% c("s", "ns"), ]
+#For the site at ALP we want to find the frequency of fusion at the following 
+#stages:
+#s= fused, 
+#ns= unfused, 
+#ec = fusion visible. 
+#Disregarding other factors such as tooth wear that have been recorded. 
+freq_table_alp <- table(alp_table$Epif)
+print(freq_table_alp)
 
-freq_table_fusion <- table(epif_filtered_df$Epif)
-print(freq_table_fusion)
+valid_values <- c("s", "ns", "ec")
+
+# Loop through the rows and remove rows where 'Epif' is not "s", "ns" or "ec"
+alp_filtered <- alp_table[alp_table$Epif %in% valid_values, ]
+
+# Print the filtered data frame
+print(alp_filtered)
+
+# Re-create the frequency table for the filtered data
+freq_table_filtered <- table(alp_filtered$Epif)
+print(freq_table_filtered)
+
+alp_plot <- ggplot(data = alp_filtered, aes(x = Epif, fill = Epif)) +
+  geom_bar(color = "black", alpha = 0.7) +  # Bar plot with black borders
+  labs(title = "Frequency of Fusion for the site ALP Categories", x = "Epif Category", y = "Count") +
+  scale_fill_manual(values = c("s" = "skyblue", "ns" = "#1C86EE", "ec" = "#B0C4DE")) +  # Custom colors
+  theme_minimal()  # Clean theme for better aesthetics
+print(alp_plot)
+#This shows that across all species at the site ALP there was a higher number of
+#unfused animal remains found showing that they died before adulthood. This
+#is most likely to be due to human interference and farming practices as they 
+#are eaten when they are large enough but have not been allowed to mature. 
+#Although there is also an amount of animals found here that have reached adulthood
+#as their bones are fully fused. This means that the animals which reached
+#maturity may have been used for other farming methods such as wool or milk production.
+
+#For the site at OLD we want to find the frequency of fusion at the following 
+#stages:
+#s= fused, 
+#ns= unfused, 
+#ec = fusion visible. 
+#Disregarding other factors such as tooth wear that have been recorded. 
+freq_table_old <- table(old_table$Epif)
+print(freq_table_old)
+
+valid_values <- c("s", "ns", "ec")
+
+# Loop through the rows and remove rows where 'Epif' is not "s", "ns" or "ec"
+old_filtered <- old_table[old_table$Epif %in% valid_values, ]
+
+# Print the filtered data frame
+print(old_filtered)
+
+# Re-create the frequency table for the filtered data
+freq_old_filtered <- table(old_filtered$Epif)
+print(freq_old_filtered)
+
+old_plot <- ggplot(data = old_filtered, aes(x = Epif, fill = Epif)) +
+  geom_bar(color = "black", alpha = 0.7) +  # Bar plot with black borders
+  labs(title = "Frequency of Fusion for the site OLD Categories", x = "Epif Category", y = "Count") +
+  scale_fill_manual(values = c("s" = "palevioletred1", "ns" = "#EE1289", "ec" = "#FF0000"))+ theme_minimal()  # Clean theme for better aesthetics
+
+print(old_plot)
+#For the site at TFC we want to find the frequency of fusion at the following 
+#stages:
+#s= fused, 
+#ns= unfused, 
+#ec = fusion visible. 
+#Disregarding other factors such as tooth wear that have been recorded. 
+freq_table_tfc <- table(tfc_table$Epif)
+print(freq_table_tfc)
+
+valid_values <- c("s", "ns", "ec")
+
+# Loop through the rows and remove rows where 'Epif' is not "s", "ns" or "ec"
+tfc_filtered <- tfc_table[tfc_table$Epif %in% valid_values, ]
+
+# Print the filtered data frame
+print(tfc_filtered)
+
+# Re-create the frequency table for the filtered data
+freq_tfc_filtered <- table(tfc_filtered$Epif)
+print(freq_tfc_filtered)
+
+tfc_plot <- ggplot(data = tfc_filtered, aes(x = Epif, fill = Epif)) +
+  geom_bar(color = "black", alpha = 0.7) +  # Bar plot with black borders
+  labs(title = "Frequency of Fusion for the site ALP Categories", x = "Epif Category", y = "Count") +
+  scale_fill_manual(values = c("s" = "#98FB98", "ns" = "#00FF7F", "ec" = "palegreen4")) +  # Custom colors
+  theme_minimal()  # Clean theme for better aesthetics
+print(tfc_plot)
+
+#This is to show a comparison of fusion frequency from across the sites alp, old and tfc.
+grid.arrange(alp_plot, old_plot, tfc_plot, ncol = 3)
 
 
 ```
